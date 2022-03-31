@@ -8,6 +8,8 @@ TagManager:
   - Relic
   - Relic-DropOff
   - Button
+  - Challenger
+  - CarriedRelic
   layers:
   - Default
   - TransparentFX

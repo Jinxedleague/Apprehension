@@ -43,6 +43,8 @@ public class MoveWalls : MonoBehaviour
         {
             movingWallsAnimator.Play("BlockNorth");
             wallsReady = false;
+
+            Debug.Log("Blocking North");
         }
     }
 
@@ -53,6 +55,7 @@ public class MoveWalls : MonoBehaviour
             movingWallsAnimator.Play("BlockSouth");
             wallsReady = false;
         }
+        Debug.Log("Blocking South");
     }
 
     public void BlockEast()
@@ -62,6 +65,7 @@ public class MoveWalls : MonoBehaviour
             movingWallsAnimator.Play("BlockEast");
             wallsReady = false;
         }
+        Debug.Log("Blocking East");
     }
 
     public void BlockWest()
@@ -71,6 +75,7 @@ public class MoveWalls : MonoBehaviour
             movingWallsAnimator.Play("BlockWest");
             wallsReady = false;
         }
+        Debug.Log("Blocking West");
     }
 
     public void BlockCenter()
@@ -80,6 +85,7 @@ public class MoveWalls : MonoBehaviour
             movingWallsAnimator.Play("BlockCenter");
             wallsReady = false;
         }
+        Debug.Log("Blocking Center");
     }
 
     public void BlockCorners()
@@ -89,6 +95,7 @@ public class MoveWalls : MonoBehaviour
             movingWallsAnimator.Play("BlockCorners");
             wallsReady = false;
         }
+        Debug.Log("Blocking Corners");
     }
 
     public void StartCooldown()
