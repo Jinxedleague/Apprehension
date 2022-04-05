@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Photon.Pun;
 
 public class PlayerController : MonoBehaviour                      // created/compiled by Matthew Gumprecht
 {
@@ -16,8 +15,6 @@ public class PlayerController : MonoBehaviour                      // created/co
     [SerializeField] private float crouchTime = 0.15f;
     [SerializeField] private Vector3 crouchedControllerCenter = new Vector3(0f, .5f, 0f);
     [SerializeField] private Vector3 standingControllerCenter = new Vector3(0f, 0f, 0f);
-    [SerializeField] private Camera playerCameraObject;
-    [SerializeField] private AudioListener playerAudioListener;
 
     public Transform playerModel, playerCamera, playerGroundCheck;
     public CharacterController characterController;
@@ -28,86 +25,70 @@ public class PlayerController : MonoBehaviour                      // created/co
     bool isOnGround;
     bool isCrouched;
 
-    //For multiplayer
-    PhotonView view;
-    //
-
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;                                                         //Disable the mouse and lock it to the screen.
-
-        view = GetComponent<PhotonView>();                                                                //Set "view" to the player's PhotonView component
-        if (view.IsMine == false)                                                                         //Since there are multiple players running this code, there will be multiple "view" components that a player's code will want to access. If other "view" components do not belong to the player, do the following.
-        {
-            //Destroy(playerCameraObject);
-            playerCameraObject.enabled = false;                                                           //Disable other cameras so the player's game is not trying to access the wrong camera.
-            playerAudioListener.enabled = false;                                                          //Disable other audio listeners so the player's game is not trying to access the wrong listener. (Unity does not work with more than one listener)
-        }
-
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (view.IsMine)
+        float lookX = Input.GetAxis("Mouse X") * mouseSensitivity;                                    //Gathers player horizontal mouse input
+        float lookY = Input.GetAxis("Mouse Y") * mouseSensitivity;                                    //Gathers player vertical mouse input
+
+        float moveX = Input.GetAxis("Horizontal");                                                    //Gathers player horizontal movement input (A/D or LeftArrow/RightArrow)
+        float moveZ = Input.GetAxis("Vertical");                                                      //Gathers player vertical movement input   (W/S or UpArrow/DownArrow)
+
+
+        //Is Player Grounded?
+        isOnGround = Physics.CheckSphere(playerGroundCheck.position, groundCheckRadius, groundMask);  //At the groundCheck's position, project a sphere or groundCheckRadius size that looks to collide with anything in the groundMask (isGrounded = true)
+        if (isOnGround && currentVelocity.y < 0f)                                                     //To prevent our gravity velocity from accumulating while not falling, reset currentVelocity.y when on the ground
         {
-            float lookX = Input.GetAxis("Mouse X") * mouseSensitivity;                                    //Gathers player horizontal mouse input
-            float lookY = Input.GetAxis("Mouse Y") * mouseSensitivity;                                    //Gathers player vertical mouse input
-
-            float moveX = Input.GetAxis("Horizontal");                                                    //Gathers player horizontal movement input (A/D or LeftArrow/RightArrow)
-            float moveZ = Input.GetAxis("Vertical");                                                      //Gathers player vertical movement input   (W/S or UpArrow/DownArrow)
-
-
-            //Is Player Grounded?
-            isOnGround = Physics.CheckSphere(playerGroundCheck.position, groundCheckRadius, groundMask);  //At the groundCheck's position, project a sphere or groundCheckRadius size that looks to collide with anything in the groundMask (isGrounded = true)
-            if (isOnGround && currentVelocity.y < 0f)                                                     //To prevent our gravity velocity from accumulating while not falling, reset currentVelocity.y when on the ground
-            {
-                currentVelocity.y = -2f;                                                                  //-2f used as reset point in the event physics sphere collides before model touches the ground, ensuring player is grounded
-            }
-
-
-            //Player Horizontal Look
-            playerModel.Rotate(Vector3.up * lookX);                                                       //Rotates player around Vector3.up by the gathered horizontal input
-
-
-            //Player Vertical Look
-            cameraRotationAroundX -= lookY;                                                               //Subtract the value of the camera's angle around X axis by vertical input
-            cameraRotationAroundX = Mathf.Clamp(cameraRotationAroundX, -90f, 90f);                        //Clamp camera rotation to 90 up and down
-            playerCamera.transform.localRotation = Quaternion.Euler(cameraRotationAroundX, 0f, 0f);       //Apply rotation
-
-
-            //Player Movement
-            Vector3 movement = transform.right * moveX + transform.forward * moveZ;                       //Creates a new Vector3 and sets its right and forward vectors to user input
-            if (movement.magnitude > 1)                                                                   //When moving diagonally, player magnitude is greater due to the combined effect of both horizontal and vertical movement. If this happens...
-            {
-                movement /= movement.magnitude;                                                           //Set magnitude to 1 so diagonal movement matches purely vertical/horizontal movement (normalizing)
-            }
-            characterController.Move(movement * movementSpeed * Time.deltaTime);                          //Apply new Vector3 to Character Controller multiplied by speed and deltaTime
-            if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))                               //If LeftShift is pressed while W is down
-            {
-                characterController.Move(movement * movementSpeed * sprintMultiplier * Time.deltaTime);   //Sprint
-            }
-
-
-            //Player Jump
-            if (Input.GetButtonDown("Jump") && isOnGround)                                                //if default "Jump" key is pressed while isOnGround is true, jump force is applied while compensating for deceleration due to gravity
-            {
-                currentVelocity.y = Mathf.Sqrt(jumpHeight * -3f * playerGravity);                         //v^2 = 2gh for vertical velocity influenced by gravity https://www.aplustopper.com/equations-of-motion/
-            }
-
-
-            //Player Crouch
-            if (Input.GetKey(KeyCode.C) && isOnGround)
-            {
-                StartCoroutine(CrouchToggle());
-            }
-
-
-            //Player Gravity
-            currentVelocity.y += playerGravity * Time.deltaTime;                                          //Add gravity float to currentVelocity y value times deltaTime
-            characterController.Move(currentVelocity * Time.deltaTime * 2.0f);                            //Apply current velocity (with gravity) to controller  !NOTE: deltaTime multiplied again to represent compounding falling speed with real gravity
+            currentVelocity.y = -2f;                                                                  //-2f used as reset point in the event physics sphere collides before model touches the ground, ensuring player is grounded
         }
+
+
+        //Player Horizontal Look
+        playerModel.Rotate(Vector3.up * lookX);                                                       //Rotates player around Vector3.up by the gathered horizontal input
+
+
+        //Player Vertical Look
+        cameraRotationAroundX -= lookY;                                                               //Subtract the value of the camera's angle around X axis by vertical input
+        cameraRotationAroundX = Mathf.Clamp(cameraRotationAroundX, -90f, 90f);                        //Clamp camera rotation to 90 up and down
+        playerCamera.transform.localRotation = Quaternion.Euler(cameraRotationAroundX, 0f, 0f);       //Apply rotation
+
+
+        //Player Movement
+        Vector3 movement = transform.right * moveX + transform.forward * moveZ;                       //Creates a new Vector3 and sets its right and forward vectors to user input
+        if (movement.magnitude > 1)                                                                   //When moving diagonally, player magnitude is greater due to the combined effect of both horizontal and vertical movement. If this happens...
+        {
+            movement /= movement.magnitude;                                                           //Set magnitude to 1 so diagonal movement matches purely vertical/horizontal movement (normalizing)
+        }
+        characterController.Move(movement * movementSpeed * Time.deltaTime);                          //Apply new Vector3 to Character Controller multiplied by speed and deltaTime
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.W))                               //If LeftShift is pressed while W is down
+        {
+            characterController.Move(movement * movementSpeed * sprintMultiplier * Time.deltaTime);   //Sprint
+        }
+
+
+        //Player Jump
+        if (Input.GetButtonDown("Jump") && isOnGround)                                                //if default "Jump" key is pressed while isOnGround is true, jump force is applied while compensating for deceleration due to gravity
+        {
+            currentVelocity.y = Mathf.Sqrt(jumpHeight * -3f * playerGravity);                         //v^2 = 2gh for vertical velocity influenced by gravity https://www.aplustopper.com/equations-of-motion/
+        }
+
+
+        //Player Crouch
+        if (Input.GetKey(KeyCode.C) && isOnGround)
+        {
+            StartCoroutine(CrouchToggle());
+        }
+
+
+        //Player Gravity
+        currentVelocity.y += playerGravity * Time.deltaTime;                                          //Add gravity float to currentVelocity y value times deltaTime
+        characterController.Move(currentVelocity * Time.deltaTime * 2.0f);                            //Apply current velocity (with gravity) to controller  !NOTE: deltaTime multiplied again to represent compounding falling speed with real gravity
     }
 
     private IEnumerator CrouchToggle()                                                                                          //Coroutine for crouching (NOTE: CameraCenter is referencing the ".center" component of the character controller)
