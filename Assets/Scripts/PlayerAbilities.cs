@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerAbilities : MonoBehaviour
 {
     [SerializeField] private GameObject playerCamera, throwSource;
     [SerializeField] private Image crosshair;
     [SerializeField] private float throwForce;
+    [SerializeField] private int challengersRemaining; //Crude win con int
     [SerializeField] private RawImage compassSprite;
     [SerializeField] private Transform playerTransform;
     [SerializeField] private GameObject relicIconCompassImage;
@@ -37,11 +39,18 @@ public class PlayerAbilities : MonoBehaviour
         UpdatePlayerLocation(challenger2);
         UpdatePlayerLocation(challenger3);
         UpdatePlayerLocation(challenger4);
+
+        challengersRemaining = 4;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(challengersRemaining == 0)
+        {
+            SceneManager.LoadScene("Win");
+        }
+
         RaycastHit hit;
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 3))   //Creates a new raycast starting at the player's camera and projecting forward 3 units
         {
@@ -183,5 +192,10 @@ public class PlayerAbilities : MonoBehaviour
         heldRelic.transform.position = throwSource.transform.position;
         heldRelic.transform.parent = null;  //NOTE!!!! FIGURE OUT RPC FOR PARENTING! I THINK THIS IS ONE THING THAT IS MAKING IT ALL FUCKY!
         relicCollected = false;
+    }
+
+    public void challengerDead()
+    {
+        challengersRemaining--;
     }
 }

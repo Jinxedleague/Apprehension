@@ -10,15 +10,19 @@ public class BatController : MonoBehaviour
     private float flapForce;
     private bool isGrounded;
     public GameObject batCam;
+    private PlayerAbilities playerAbilities;
+    private GameObject player;
 
     // Start is called before the first frame update
     void Start()
     {
         isGrounded = true;
         batRB = GetComponent<Rigidbody>();
-        horizontalSpeed = 20f;
-        verticalSpeed = 10f;
+        horizontalSpeed = 15f;
+        verticalSpeed = 5f;
         flapForce = 5f;
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerAbilities = player.GetComponent<PlayerAbilities>();
     }
 
     // Update is called once per frame
@@ -45,11 +49,21 @@ public class BatController : MonoBehaviour
         //Mouse flight
         if (Input.GetKey(KeyCode.Mouse0) && !isGrounded)
         {
-            batRB.MovePosition(transform.position + batCam.transform.forward / 5);
+            batRB.MovePosition(transform.position + batCam.transform.forward / 3);
         }
         if (Input.GetKeyUp(KeyCode.Mouse0) && !isGrounded)
         {
             batRB.velocity = new Vector3(0, 0, 0);
+        }
+
+        RaycastHit hit;
+        if (Physics.Raycast(batCam.transform.position, batCam.transform.forward, out hit, 3))
+        {
+            if (hit.collider.gameObject.tag == "Challenger" && Input.GetKeyDown(KeyCode.Q))
+            {
+                hit.collider.gameObject.SetActive(false);
+                playerAbilities.challengerDead();
+            }
         }
     }
 
