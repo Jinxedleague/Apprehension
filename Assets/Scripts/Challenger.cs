@@ -89,7 +89,6 @@ public class Challenger : MonoBehaviour
         destinationDistance = Vector3.Distance(transform.position, challengerAgent.destination);
         if (destinationDistance <= 2 && searching == true && relicFound == false)
         {
-            Debug.Log("Destination Reached");
             Search();
         }
     }
