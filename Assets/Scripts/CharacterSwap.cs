@@ -42,10 +42,10 @@ public class CharacterSwap : MonoBehaviour
             ActivateBat();
         }
 
-/*        if (Input.GetKeyDown(KeyCode.Alpha3) && monkeActive == false && monkeRecharge >= monkeCooldownTime)
+        if (Input.GetKeyDown(KeyCode.Alpha3) && monkeActive == false && monkeRecharge >= monkeCooldownTime)
         {
             ActivateMonke();
-        }*/
+        }
 
         ManageCooldown();
         ManageTimerColors();
@@ -140,7 +140,6 @@ public class CharacterSwap : MonoBehaviour
     {
         bat.SetActive(false);
         monke.SetActive(false);
-        ActivateMonke();
         playerController.enabled = true;
         playerCam.SetActive(true);
 
@@ -168,9 +167,10 @@ public class CharacterSwap : MonoBehaviour
     {
         bat.SetActive(false);
         monke.SetActive(true);
+        playerController.enabled = false;
+        playerCam.SetActive(false);
 
-
-
+        monkeRecharge = 0;
         mmActive = false;
         batActive = false;
         monkeActive = true;
