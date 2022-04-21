@@ -62,6 +62,7 @@ public class Challenger : MonoBehaviour
             relicFound = false;
             Search();
             statusUI.GetComponent<StatusIcons>().UpdateStatus(challengerNumber, 1);
+            other.GetComponent<ScoreKeeper>().RelicDelivered();
         }
     }
 

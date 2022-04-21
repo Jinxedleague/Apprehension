@@ -19,6 +19,9 @@ public class MonkeyController : MonoBehaviour
     public GameObject cameraObject;
     private bool camUp;
 
+    public GameObject player;
+    private PlayerAbilities playerAbilities;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,6 +29,7 @@ public class MonkeyController : MonoBehaviour
         canDash = true;
         camUp = true;
         monkeyRB = GetComponent<Rigidbody>();
+        playerAbilities = player.GetComponent<PlayerAbilities>();
     }
 
     void Update()
@@ -53,7 +57,8 @@ public class MonkeyController : MonoBehaviour
             float rotation = Input.GetAxis("Horizontal") * dashRotationSpeed * Time.deltaTime;
 
             // Move translation along the object's z-axis
-            transform.Translate(0, 0, translation);
+            //transform.Translate(0, 0, translation);
+            monkeyRB.MovePosition(transform.position + transform.forward);
 
             // Rotate around our y-axis
             transform.Rotate(0, rotation, 0);
@@ -83,6 +88,15 @@ public class MonkeyController : MonoBehaviour
             {
                 cameraObject.transform.Translate(0, -10 * Time.deltaTime, 0, Space.Self);
             }
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Challenger")
+        {
+            collision.gameObject.SetActive(false);
+            playerAbilities.challengerDead();
         }
     }
 

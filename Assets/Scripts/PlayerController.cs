@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour                      // created/co
     [SerializeField] private float crouchTime = 0.15f;
     [SerializeField] private Vector3 crouchedControllerCenter = new Vector3(0f, .5f, 0f);
     [SerializeField] private Vector3 standingControllerCenter = new Vector3(0f, 0f, 0f);
+    [SerializeField] private GameObject player;
 
     public Transform playerModel, playerCamera, playerGroundCheck;
     public CharacterController characterController;
@@ -89,6 +90,11 @@ public class PlayerController : MonoBehaviour                      // created/co
         //Player Gravity
         currentVelocity.y += playerGravity * Time.deltaTime;                                          //Add gravity float to currentVelocity y value times deltaTime
         characterController.Move(currentVelocity * Time.deltaTime * 2.0f);                            //Apply current velocity (with gravity) to controller  !NOTE: deltaTime multiplied again to represent compounding falling speed with real gravity
+
+        if (player.transform.position.y < 100)
+        {
+            player.transform.position = new Vector3(0f, 112f, 35f);
+        }
     }
 
     private IEnumerator CrouchToggle()                                                                                          //Coroutine for crouching (NOTE: CameraCenter is referencing the ".center" component of the character controller)
