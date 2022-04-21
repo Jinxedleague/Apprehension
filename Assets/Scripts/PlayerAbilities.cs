@@ -52,7 +52,7 @@ public class PlayerAbilities : MonoBehaviour
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, 3))   //Creates a new raycast starting at the player's camera and projecting forward 3 units
+        if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out hit, Mathf.Infinity))   //Creates a new raycast starting at the player's camera and projecting forward 3 units
         {
 
              ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +87,21 @@ public class PlayerAbilities : MonoBehaviour
                 if (Input.GetKey(KeyCode.F))
                 {
                     hit.collider.gameObject.GetComponent<Button>().onClick.Invoke();                      //If "F" is pressed while looking at the button, invoke the onClick function on the Button component
+                }
+            }
+
+            /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///Individual Wall Section Triggers
+            if (hit.collider.gameObject.tag == "Trigger")
+            {
+                crosshair.rectTransform.sizeDelta = new Vector2(12f, 12f);                                //Resize and color the crosshair
+                crosshair.color = new Color(1f, 1f, 1f, 1f);
+
+                hit.collider.gameObject.GetComponent<SectorWalls>().ActivateBeam();
+
+                if (Input.GetKey(KeyCode.F))
+                {
+                    hit.collider.gameObject.GetComponent<SectorWalls>().ActivateWalls();                      //If "F" is pressed while looking at the button, invoke the onClick function on the Button component
                 }
             }
         }

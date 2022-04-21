@@ -59,7 +59,7 @@ public class BatController : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(batCam.transform.position, batCam.transform.forward, out hit, 3))
         {
-            if (hit.collider.gameObject.tag == "Challenger" && Input.GetKeyDown(KeyCode.Q))
+            if (hit.collider.gameObject.tag == "Challenger" && Input.GetKeyDown(KeyCode.F))
             {
                 hit.collider.gameObject.SetActive(false);
                 playerAbilities.challengerDead();
