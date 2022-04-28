@@ -14,6 +14,8 @@ public class CharacterSwap : MonoBehaviour
 
     private float mmRecharge, batRecharge, monkeRecharge, monkeTimerCurrent;
     private bool mmActive, batActive, monkeActive, monkeTimeStart;
+    public MonkeyController monkeyCon;
+    public BatController batCon;
 
     // Start is called before the first frame update
     void Start()
@@ -152,6 +154,7 @@ public class CharacterSwap : MonoBehaviour
 
     public void ActivateMM()
     {
+        monkeyCon.setInactive();
         bat.SetActive(false);
         monke.SetActive(false);
         playerController.enabled = true;
@@ -165,6 +168,7 @@ public class CharacterSwap : MonoBehaviour
 
     public void ActivateBat()
     {
+        monkeyCon.setInactive();
         bat.SetActive(true);
         monke.SetActive(false);
         bat.transform.position = new Vector3(player.transform.position.x, player.transform.position.y + 3, player.transform.position.z);

@@ -11,6 +11,7 @@ TagManager:
   - Challenger
   - CarriedRelic
   - Trigger
+  - DashCollider
   layers:
   - Default
   - TransparentFX

@@ -18,7 +18,6 @@ public class MonkeyController : MonoBehaviour
     //Camera Variables
     public GameObject cameraObject;
     private bool camUp;
-
     public GameObject player;
     private PlayerAbilities playerAbilities;
 
@@ -34,7 +33,8 @@ public class MonkeyController : MonoBehaviour
 
     void Update()
     {
-        if(!isDashing)
+        Debug.DrawRay(this.transform.position + transform.forward, this.transform.forward * 1f, Color.red);
+        if (!isDashing)
         {
             if(cameraObject.transform.localPosition.y > .3f)
             {
@@ -65,10 +65,7 @@ public class MonkeyController : MonoBehaviour
 
             if(Input.GetKeyDown(KeyCode.LeftShift))
             {
-                StopAllCoroutines();
-                isDashing = false;
-                canDash = false;
-                StartCoroutine(DashCooldown());
+                stopDash();
             }
 
             if(cameraObject.transform.localPosition.y > .75f)
@@ -87,6 +84,17 @@ public class MonkeyController : MonoBehaviour
             else
             {
                 cameraObject.transform.Translate(0, -10 * Time.deltaTime, 0, Space.Self);
+            }
+
+            RaycastHit collisionCheck;
+            if (Physics.Raycast(this.transform.position + this.transform.forward, this.transform.forward, out collisionCheck, 1f))
+            {
+                Debug.DrawRay(new Vector3(this.transform.position.x, this.transform.position.y, this.transform.position.z + 1), this.transform.forward * collisionCheck.distance, Color.red);
+                Debug.Log(collisionCheck.collider.gameObject.name);
+                if(collisionCheck.collider.gameObject.CompareTag("DashCollider"))
+                {
+                    stopDash();
+                }
             }
         }
     }
@@ -108,14 +116,29 @@ public class MonkeyController : MonoBehaviour
     public IEnumerator DashTimer()
     {
         canDash = false;
-        yield return new WaitForSeconds(4);
+        yield return new WaitForSeconds(3);
         isDashing = false;
         StartCoroutine(DashCooldown());
     }
 
     public IEnumerator DashCooldown()
     {
-        yield return new WaitForSeconds(8);
+        yield return new WaitForSeconds(5);
         canDash = true;
+    }
+
+    public void setInactive()
+    {
+        isDashing = false;
+        canDash = true;
+    }
+
+    public void stopDash()
+    {
+        monkeyRB.velocity = new Vector3(0,0,0);
+        StopAllCoroutines();
+        isDashing = false;
+        canDash = false;
+        StartCoroutine(DashCooldown());
     }
 }
