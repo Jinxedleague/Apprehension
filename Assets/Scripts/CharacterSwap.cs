@@ -10,9 +10,10 @@ public class CharacterSwap : MonoBehaviour
     [SerializeField] private Slider timerMM, timerBat, timerMonke;
     [SerializeField] private Image mmTimerBarFill, batTimerBarFill, monkeTimerBarFill, mmIconBackground, batIconBackground, monkeIconBackground;
     [SerializeField] private int mmCooldownTime, batCooldownTime, monkeCooldownTime;    //! Whenever this value is changed in the editor, change the MaxValue for the associated timer UI elements !
+    [SerializeField] private float monkeTimeStartValue;
 
-    private float mmRecharge, batRecharge, monkeRecharge;
-    private bool mmActive, batActive, monkeActive;
+    private float mmRecharge, batRecharge, monkeRecharge, monkeTimerCurrent;
+    private bool mmActive, batActive, monkeActive, monkeTimeStart;
 
     // Start is called before the first frame update
     void Start()
@@ -25,13 +26,14 @@ public class CharacterSwap : MonoBehaviour
         monkeActive = false;
 
         timerMM.value = mmCooldownTime;
+
+        monkeTimerCurrent = monkeTimeStartValue;
+        monkeTimeStart = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
         if (Input.GetKeyDown(KeyCode.Alpha1) && mmActive == false && mmRecharge >= mmCooldownTime)
         {
             ActivateMM();
@@ -51,6 +53,18 @@ public class CharacterSwap : MonoBehaviour
         ManageTimerColors();
         ManageIconBackgrounds();
         UpdateTimers();
+
+        if (monkeTimeStart == true)
+        {
+            monkeTimerCurrent -= 1 * Time.deltaTime;
+
+            if (monkeTimerCurrent <= 0)
+            {
+                ActivateMM();
+                monkeTimerCurrent = monkeTimeStartValue;
+                monkeTimeStart = false;
+            }
+        }
     }
 
     private void ManageCooldown()
@@ -174,5 +188,6 @@ public class CharacterSwap : MonoBehaviour
         mmActive = false;
         batActive = false;
         monkeActive = true;
+        monkeTimeStart = true;
     }
 }

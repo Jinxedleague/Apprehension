@@ -35,10 +35,10 @@ public class PlayerAbilities : MonoBehaviour
 
         compassUnit = compassSprite.rectTransform.rect.width / 360f;
         relicMaxDistance = 175f;
-        UpdatePlayerLocation(challenger1);
+/*        UpdatePlayerLocation(challenger1);
         UpdatePlayerLocation(challenger2);
         UpdatePlayerLocation(challenger3);
-        UpdatePlayerLocation(challenger4);
+        UpdatePlayerLocation(challenger4);*/
 
         challengersRemaining = 4;
     }
@@ -189,7 +189,7 @@ public class PlayerAbilities : MonoBehaviour
         relicLocations.Add(relic);
     }
 
-    Vector2 GetRelicPositionForCompass (RelicTracker relic)
+    Vector2 GetRelicPositionForCompass(RelicTracker relic)
     {
         Vector2 playerPosition = new Vector2(playerTransform.position.x, playerTransform.position.z);
         Vector2 playerForwardVector = new Vector2(playerTransform.forward.x, playerTransform.forward.z);
