@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
 
 public class MoveWalls : MonoBehaviour
@@ -8,15 +9,25 @@ public class MoveWalls : MonoBehaviour
 
     [SerializeField] private float coolDown;
     [SerializeField] private Animator movingWallsAnimator;
-    [SerializeField] private TextMeshProUGUI timer;
+    //[SerializeField] private TextMeshProUGUI timer;
+    [SerializeField] private Image northIcon, southIcon, eastIcon, westIcon, centerIcon, cornerIcon;
+    [SerializeField] private Sprite disabledIcon;
     private float coolDownReset;
     private bool wallsReady = true;
     private bool startCooldown = false;
+    private bool northUsed, southUsed, eastUsed, westUsed, centerUsed, cornersUsed;
 
     // Start is called before the first frame update
     void Start()
     {
         coolDownReset = coolDown;
+
+        northUsed = false;
+        southUsed = false;
+        eastUsed = false;
+        westUsed = false;
+        centerUsed = false;
+        cornersUsed = false;
     }
 
     // Update is called once per frame
@@ -33,69 +44,98 @@ public class MoveWalls : MonoBehaviour
                 coolDown = coolDownReset;
             }
 
-            timer.text = coolDown.ToString("F2");
+            //timer.text = coolDown.ToString("F2");
         }
     }
 
     public void BlockNorth()
     {
-        if (wallsReady == true)
+        if (northUsed == false)
         {
-            movingWallsAnimator.Play("BlockNorth");
-            wallsReady = false;
+            if (wallsReady == true)
+            {
+                movingWallsAnimator.Play("BlockNorth");
+                wallsReady = false;
 
-            Debug.Log("Blocking North");
+                northUsed = true;
+                northIcon.sprite = disabledIcon;
+            }
         }
     }
 
     public void BlockSouth()
     {
-        if (wallsReady == true)
+        if (southUsed == false)
         {
-            movingWallsAnimator.Play("BlockSouth");
-            wallsReady = false;
+            if (wallsReady == true)
+            {
+                movingWallsAnimator.Play("BlockSouth");
+                wallsReady = false;
+
+                southUsed = true;
+                southIcon.sprite = disabledIcon;
+            }
         }
-        Debug.Log("Blocking South");
     }
 
     public void BlockEast()
     {
-        if (wallsReady == true)
+        if (eastUsed == false)
         {
-            movingWallsAnimator.Play("BlockEast");
-            wallsReady = false;
+            if (wallsReady == true)
+            {
+                movingWallsAnimator.Play("BlockEast");
+                wallsReady = false;
+
+                eastUsed = true;
+                eastIcon.sprite = disabledIcon;
+            }
         }
-        Debug.Log("Blocking East");
     }
 
     public void BlockWest()
     {
-        if (wallsReady == true)
+        if (westUsed == false)
         {
-            movingWallsAnimator.Play("BlockWest");
-            wallsReady = false;
+            if (wallsReady == true)
+            {
+                movingWallsAnimator.Play("BlockWest");
+                wallsReady = false;
+
+                westUsed = true;
+                westIcon.sprite = disabledIcon;
+            }
         }
-        Debug.Log("Blocking West");
     }
 
     public void BlockCenter()
     {
-        if (wallsReady == true)
+        if (centerUsed == false)
         {
-            movingWallsAnimator.Play("BlockCenter");
-            wallsReady = false;
+            if (wallsReady == true)
+            {
+                movingWallsAnimator.Play("BlockCenter");
+                wallsReady = false;
+
+                centerUsed = true;
+                centerIcon.sprite = disabledIcon;
+            }
         }
-        Debug.Log("Blocking Center");
     }
 
     public void BlockCorners()
     {
-        if (wallsReady == true)
+        if (cornersUsed == false)
         {
-            movingWallsAnimator.Play("BlockCorners");
-            wallsReady = false;
+            if (wallsReady == true)
+            {
+                movingWallsAnimator.Play("BlockCorners");
+                wallsReady = false;
+
+                cornersUsed = true;
+                cornerIcon.sprite = disabledIcon;
+            }
         }
-        Debug.Log("Blocking Corners");
     }
 
     public void StartCooldown()

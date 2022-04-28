@@ -40,6 +40,10 @@ public class StatusIcons : MonoBehaviour
             {
                 C1Icon.sprite = icons[2];
             }
+            if (status == 4)
+            {
+                C1Icon.sprite = icons[3];
+            }
         }
 
         if (challenger == 2)
@@ -55,6 +59,10 @@ public class StatusIcons : MonoBehaviour
             if (status == 3)
             {
                 C2Icon.sprite = icons[2];
+            }
+            if (status == 4)
+            {
+                C2Icon.sprite = icons[3];
             }
         }
 
@@ -72,6 +80,10 @@ public class StatusIcons : MonoBehaviour
             {
                 C3Icon.sprite = icons[2];
             }
+            if (status == 4)
+            {
+                C3Icon.sprite = icons[3];
+            }
         }
 
         if (challenger == 4)
@@ -87,6 +99,10 @@ public class StatusIcons : MonoBehaviour
             if (status == 3)
             {
                 C4Icon.sprite = icons[2];
+            }
+            if (status == 4)
+            {
+                C4Icon.sprite = icons[3];
             }
         }
     }

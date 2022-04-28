@@ -95,7 +95,7 @@ public class MonkeyController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Challenger")
         {
-            collision.gameObject.SetActive(false);
+            collision.gameObject.GetComponent<Challenger>().Caught();
             playerAbilities.challengerDead();
         }
     }

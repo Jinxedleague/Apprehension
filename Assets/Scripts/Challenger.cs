@@ -11,12 +11,13 @@ public class Challenger : MonoBehaviour
     [SerializeField] private GameObject challenger, challengerHand, dropOff;
     [SerializeField] private GameObject statusUI;
     [SerializeField] private GameObject player;
+    [SerializeField] private GameObject scoreKeeper;
 
     //private GameObject[] activeRelics;
     private List<GameObject> activeRelics = new List<GameObject> ();
 
     private GameObject carriedRelic;
-    private bool searching, relicFound;
+    private bool searching, relicFound, carryingRelic;
     private float destinationDistance;
 
     // Start is called before the first frame update
@@ -31,6 +32,7 @@ public class Challenger : MonoBehaviour
         Search();
         searching = true;
         relicFound = false;
+        carryingRelic = false;
     }
 
     // Update is called once per frame
@@ -51,6 +53,7 @@ public class Challenger : MonoBehaviour
         if (other.tag == "Relic")
         {
             PickUpRelic(other.gameObject);
+            carryingRelic = true;
         }
 
         if (other.tag == "Relic-DropOff")
@@ -60,9 +63,10 @@ public class Challenger : MonoBehaviour
             Destroy(carriedRelic.gameObject);
             searching = true;
             relicFound = false;
+            carryingRelic = false;
             Search();
             statusUI.GetComponent<StatusIcons>().UpdateStatus(challengerNumber, 1);
-            other.GetComponent<ScoreKeeper>().RelicDelivered();
+            scoreKeeper.GetComponent<ScoreKeeper>().RelicDelivered();
         }
     }
 
@@ -110,5 +114,20 @@ public class Challenger : MonoBehaviour
     private void DeliverRelic()
     {
         challengerAgent.destination = dropOff.transform.position;
+    }
+
+    public void Caught()
+    {
+        statusUI.GetComponent<StatusIcons>().UpdateStatus(challengerNumber, 4);
+        if (carryingRelic == true)
+        {
+            carriedRelic.tag = "Relic";
+            carriedRelic.transform.parent = null;
+            carriedRelic.GetComponent<Collider>().enabled = true;
+            carriedRelic.GetComponent<Rigidbody>().useGravity = true;
+            carryingRelic = false;
+        }
+        challengerAgent.enabled = false;
+        this.gameObject.transform.position = new Vector3(0f, -17f, 0f);
     }
 }
