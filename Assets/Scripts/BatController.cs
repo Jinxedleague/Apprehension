@@ -16,7 +16,8 @@ public class BatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        isGrounded = true;
+        StartCoroutine(ConstantFlap());
+        isGrounded = false;
         batRB = GetComponent<Rigidbody>();
         horizontalSpeed = 15f;
         verticalSpeed = 5f;
