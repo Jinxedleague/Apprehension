@@ -118,4 +118,9 @@ public class PlayerController : MonoBehaviour                      // created/co
 
         isCrouched = !isCrouched;
     }
+
+    public void setMouseSensitivity(float value)
+    {
+        mouseSensitivity = value;
+    }
 }
