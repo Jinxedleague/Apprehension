@@ -13,6 +13,10 @@ public class Challenger : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject scoreKeeper;
 
+    public Material standardMat;
+    public Material highlightMat;
+    private Renderer challengerRenderer;
+
     //private GameObject[] activeRelics;
     private List<GameObject> activeRelics = new List<GameObject> ();
 
@@ -33,6 +37,8 @@ public class Challenger : MonoBehaviour
         searching = true;
         relicFound = false;
         carryingRelic = false;
+
+        challengerRenderer.GetComponent<Renderer>();
     }
 
     // Update is called once per frame
