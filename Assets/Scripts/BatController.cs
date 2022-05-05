@@ -16,7 +16,6 @@ public class BatController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(ConstantFlap());
         isGrounded = false;
         batRB = GetComponent<Rigidbody>();
         horizontalSpeed = 15f;
@@ -24,6 +23,7 @@ public class BatController : MonoBehaviour
         flapForce = 5f;
         player = GameObject.FindGameObjectWithTag("Player");
         playerAbilities = player.GetComponent<PlayerAbilities>();
+        StartCoroutine(ConstantFlap());
     }
 
     // Update is called once per frame
