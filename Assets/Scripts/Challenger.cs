@@ -38,7 +38,7 @@ public class Challenger : MonoBehaviour
         relicFound = false;
         carryingRelic = false;
 
-        challengerRenderer.GetComponent<Renderer>();
+        challengerRenderer = GetComponent<Renderer>();
     }
 
     // Update is called once per frame
@@ -135,5 +135,12 @@ public class Challenger : MonoBehaviour
         }
         challengerAgent.enabled = false;
         this.gameObject.transform.position = new Vector3(0f, -17f, 0f);
+    }
+
+    public IEnumerator getRevealed()
+    {
+        challengerRenderer.material = highlightMat;
+        yield return new WaitForSeconds(10);
+        challengerRenderer.material = standardMat;
     }
 }

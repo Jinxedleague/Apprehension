@@ -12,6 +12,10 @@ public class BatController : MonoBehaviour
     public GameObject batCam;
     private PlayerAbilities playerAbilities;
     private GameObject player;
+    public Challenger challengerController1;
+    public Challenger challengerController2;
+    public Challenger challengerController3;
+    public Challenger challengerController4;
 
     // Start is called before the first frame update
     void Start()
@@ -57,14 +61,12 @@ public class BatController : MonoBehaviour
             batRB.velocity = new Vector3(0, 0, 0);
         }
 
-        RaycastHit hit;
-        if (Physics.Raycast(batCam.transform.position, batCam.transform.forward, out hit, 3))
+        if(Input.GetKeyDown(KeyCode.F))
         {
-            if (hit.collider.gameObject.tag == "Challenger" && Input.GetKeyDown(KeyCode.F))
-            {
-                hit.collider.gameObject.SetActive(false);
-                playerAbilities.challengerDead();
-            }
+            StartCoroutine(challengerController1.getRevealed());
+            StartCoroutine(challengerController2.getRevealed());
+            StartCoroutine(challengerController3.getRevealed());
+            StartCoroutine(challengerController4.getRevealed());
         }
     }
 

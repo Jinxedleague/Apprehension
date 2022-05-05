@@ -3,7 +3,7 @@ Shader "Echolocation/AlwaysVisible"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _Color("Always Visible Color", Color) = (0,0,0,0)
+        _Color("Always Visible Color", Color) = (255,0,0,0)
     }
     SubShader
     {
