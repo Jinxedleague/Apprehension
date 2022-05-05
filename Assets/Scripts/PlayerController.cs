@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour                      // created/compiled by Matthew Gumprecht
 {
-    [SerializeField] private float mouseSensitivity = 2f;
+    [SerializeField] private float mouseSensitivity = 250f;
     [SerializeField] private float movementSpeed = 8f;
     [SerializeField] private float sprintMultiplier = 0.8f;
     [SerializeField] private float jumpHeight = 0.7f;
@@ -35,8 +35,8 @@ public class PlayerController : MonoBehaviour                      // created/co
     // Update is called once per frame
     void Update()
     {
-        float lookX = Input.GetAxis("Mouse X") * mouseSensitivity;                                    //Gathers player horizontal mouse input
-        float lookY = Input.GetAxis("Mouse Y") * mouseSensitivity;                                    //Gathers player vertical mouse input
+        float lookX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;                                    //Gathers player horizontal mouse input
+        float lookY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;                                    //Gathers player vertical mouse input
 
         float moveX = Input.GetAxis("Horizontal");                                                    //Gathers player horizontal movement input (A/D or LeftArrow/RightArrow)
         float moveZ = Input.GetAxis("Vertical");                                                      //Gathers player vertical movement input   (W/S or UpArrow/DownArrow)
