@@ -63,10 +63,23 @@ public class BatController : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.F))
         {
-            StartCoroutine(challengerController1.getRevealed());
-            StartCoroutine(challengerController2.getRevealed());
-            StartCoroutine(challengerController3.getRevealed());
-            StartCoroutine(challengerController4.getRevealed());
+            if(Vector3.Distance(challengerController1.gameObject.transform.position,transform.position) < 500)
+            {
+                StartCoroutine(challengerController1.getRevealed());
+            }
+            if (Vector3.Distance(challengerController2.gameObject.transform.position, transform.position) < 500)
+            {
+                StartCoroutine(challengerController2.getRevealed());
+            }
+            if (Vector3.Distance(challengerController3.gameObject.transform.position, transform.position) < 500)
+            {
+                StartCoroutine(challengerController3.getRevealed());
+            }
+            if (Vector3.Distance(challengerController4.gameObject.transform.position, transform.position) < 500)
+            {
+                StartCoroutine(challengerController4.getRevealed());
+            }
+          
         }
     }
 

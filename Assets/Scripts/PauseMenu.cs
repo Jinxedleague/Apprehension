@@ -9,7 +9,13 @@ public class PauseMenu : MonoBehaviour
     public static bool GameIsPaused = false;
     public GameObject pauseMenuUI;
     public Slider SensitivitySlider;
+    public Slider VolumeSlider;
+    public Slider MusicSlider;
+    public AudioSource Ambience;
+    public AudioSource Music;
+    public Text volumeText;
     public Text senseText;
+    public Text musicText;
 
     public PlayerController playerCon;
     public BatCamera batCam;
@@ -18,6 +24,8 @@ public class PauseMenu : MonoBehaviour
     private void Start()
     {
         SensitivitySlider.value = 250;
+        VolumeSlider.value = 0.25f;
+        MusicSlider.value = 0.5f;
     }
 
     void Update()
@@ -38,6 +46,12 @@ public class PauseMenu : MonoBehaviour
         playerCon.setMouseSensitivity(SensitivitySlider.value);
         batCam.setMouseSensitivity(SensitivitySlider.value);
         monkeyCam.setMouseSensitivity(SensitivitySlider.value);
+
+        volumeText.text = "Value:" + VolumeSlider.value.ToString();
+        Ambience.volume = VolumeSlider.value;
+
+        musicText.text = "Value:" + MusicSlider.value.ToString();
+        Music.volume = MusicSlider.value;
     }
 
     private void Resume()
