@@ -9,4 +9,9 @@ public class Settings : MonoBehaviour
     {
         Credit.SetActive(true);
     }
+
+    public void QuitApp()
+    {
+        Application.Quit();
+    }
 }
